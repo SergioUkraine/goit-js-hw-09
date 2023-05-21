@@ -1,5 +1,6 @@
 const btnStart = document.querySelector('[data-start]');
 const btnStop = document.querySelector('[data-stop]');
+btnStop.setAttribute('disabled','');
 
 
 btnStart.addEventListener('click', () => {
@@ -13,10 +14,9 @@ btnStop.addEventListener('click', () => {
 
 const changeColor = {
     bgColorInterval: null,
-    isActive: false,
 
     start() {
-        if (this.isActive) { return };
+        toggleButtonsDisabled();
         this.bgColorInterval = setInterval(() => {
             const color = getRandomHexColor();
             changeBackgroundColor(color);
@@ -26,10 +26,14 @@ const changeColor = {
     
     stop() {
         clearInterval(this.bgColorInterval);
-        this.isActive = false;
+        toggleButtonsDisabled();
     }
 };
 
+function toggleButtonsDisabled() {
+    btnStart.toggleAttribute('disabled');
+    btnStop.toggleAttribute('disabled');
+}
 
 function changeBackgroundColor(color) {
     document.body.style.backgroundColor = color;
