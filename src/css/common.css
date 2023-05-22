@@ -16,3 +16,46 @@ img {
   display: block;
   max-width: 100%;
 }
+
+.input-wrapper {
+  width: 300px;
+  display: flex;
+  justify-content: space-between;
+
+}
+
+.start-input {
+  width: calc(80%);
+  height: 30px;
+  border-radius: 4px;
+}
+
+.start-btn {
+  width: calc(15%);
+}
+
+.timer {
+  margin-top: 20px;
+  display: flex;
+  width: 300px;
+  justify-content: space-between;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.value {
+  text-align: center;
+  font-size: 40px;
+  font-weight: 400;
+}
+
+.label {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
