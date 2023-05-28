@@ -1,13 +1,7 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 Notify.init({ useIcon: false,});
 
-const refs = {
-  form: document.querySelector('.form'),
-  delay: document.querySelector('[name="delay"]'),
-  step: document.querySelector('[name="step"]'),
-  amount: document.querySelector('[name="amount"]'),
-  btnSubmit: document.querySelector('[type="submit"]'),
-};
+const form = document.querySelector('.form');
 
 let params = {
   delay: null,
@@ -15,20 +9,35 @@ let params = {
   amount: null,
 };
 
-function init() {
-  refs.delay.value = 1000;
-  refs.step.value = 500;
-  refs.amount.value = 5;
+form.addEventListener('submit', onSubmitForm);
+form.addEventListener('change', onChangeForm);
 
-  params.delay = refs.delay.value;
-  params.step = refs.step.value;
-  params.amount = refs.amount.value;
-
-  console.log(params);
+function onSubmitForm(e) {
+  e.preventDefault();
+  makeArrayPromises(params);
 }
 
-init();
+function onChangeForm(e) {
+  const name = e.target.name;
+  const value = Number.parseInt(e.target.value);
+  params[name] = value;
+}
 
+function makeArrayPromises({ delay, step, amount }) {
+  let count = 1;
+  while (count <= amount)
+  {    
+    createPromise(count, delay)
+      .then(({ position, delay }) => {
+        Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
+      })
+      .catch(({ position, delay }) => {
+        Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
+      });
+    delay += step;
+    count++;
+  }
+}
 
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
@@ -43,39 +52,4 @@ function createPromise(position, delay) {
       }
     }, delay);
   });
-}
-
-
-refs.btnSubmit.addEventListener('click', onClickBtnSubmit);
-refs.form.addEventListener('change', onChangeForm);
-
-
-function onClickBtnSubmit(e) {
-  e.preventDefault();
-  makeArrayPromises(params);
-}
-
-function onChangeForm(e) {
-  const name = e.target.name;
-  const value = e.target.value;
-  params[name] = value;
-  console.log(params);
-}
-
-function makeArrayPromises({delay, step, amount}) {
-  let count = 1;
-
-  while (count <= amount)
-  {    
-    console.log(`delay = ${delay}`);
-    createPromise(count, delay)
-      .then(({ position, delay }) => {
-        Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
-      })
-      .catch(({ position, delay }) => {
-        Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
-      });
-    delay = +delay + +step;
-    count++;
-  }
 }
