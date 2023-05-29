@@ -12,7 +12,7 @@ const refs = {
     seconds: document.querySelector('[data-seconds]'),
 }
 
-const btnStartDisable = refs.btnStart.setAttribute('disabled', '');
+setDisableBtnStart();
 let chosenDate = null;
 let countDownInterval = null;
 
@@ -28,10 +28,11 @@ const options = {
         }
 
         if (selectedDates[0] < new Date) {
+            setDisableBtnStart();
             countDown.failureMessage();
             return;
         }
-        refs.btnStart.removeAttribute('disabled');
+        removeDisableBtnStart();
         chosenDate = selectedDates[0];
     },
 };
@@ -42,7 +43,7 @@ const countDown = {
     isActive: false,
     start() {
         if (this.isActive) { return; }
-        btnStartDisable;
+        setDisableBtnStart();
         this.isActive = true;
         countDownInterval = setInterval(() => {
             let deltaTime = chosenDate - new Date;
@@ -66,7 +67,6 @@ const countDown = {
         Report.success('Time is over!','','OK');
     },
     failureMessage() {
-        btnStartDisable;
         Notify.failure('Please choose a date in the future');
     },
 }
@@ -74,6 +74,15 @@ const countDown = {
 refs.btnStart.addEventListener('click', () => {
     countDown.start();
 });
+
+
+function setDisableBtnStart() {
+    refs.btnStart.setAttribute('disabled', '');
+}
+
+function removeDisableBtnStart() {
+    refs.btnStart.removeAttribute('disabled');
+}
 
  
 function updateClockTime({days, hours, minutes, seconds }) {
